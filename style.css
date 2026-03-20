@@ -63,6 +63,19 @@ nav {
     color: var(--accent);
 }
 
+.lang-switch {
+    background: var(--accent);
+    color: #fff !important;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 13px !important;
+}
+
+.lang-switch:hover {
+    opacity: 0.85;
+}
+
 /* Hero */
 #hero {
     padding: 140px 24px 80px;
