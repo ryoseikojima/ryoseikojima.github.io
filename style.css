@@ -22,6 +22,7 @@ body {
     background: var(--bg);
     line-height: 1.7;
     font-size: 15px;
+    overflow-x: hidden;
 }
 
 /* Nav */
@@ -454,8 +455,8 @@ footer {
     }
 
     .nav-links a {
-        margin-left: 16px;
-        font-size: 12px;
+        margin-left: 12px;
+        font-size: 11px;
     }
 
     .award-item {
@@ -463,22 +464,53 @@ footer {
         gap: 4px;
     }
 
+    .award-item div {
+        word-break: break-word;
+        overflow-wrap: anywhere;
+    }
+
     .award-date {
         width: auto;
     }
 
+    section {
+        padding: 48px 16px;
+    }
+
+    #hero {
+        padding: 120px 16px 60px;
+    }
+
+    .container {
+        overflow-x: hidden;
+    }
+
+    .pub-list {
+        padding-left: 16px;
+    }
+
+    .pub-list li {
+        word-break: break-word;
+        overflow-wrap: anywhere;
+    }
+
     .contact-email {
-        font-size: 14px;
+        font-size: 13px;
         word-break: break-all;
     }
 
     .contact-links {
         flex-wrap: wrap;
-        gap: 12px;
+        gap: 10px;
+        justify-content: center;
     }
 
     .contact-links a {
-        font-size: 13px;
-        padding: 6px 16px;
+        font-size: 12px;
+        padding: 6px 14px;
+    }
+
+    #contact {
+        padding: 48px 16px;
     }
 }
