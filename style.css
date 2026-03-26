@@ -466,4 +466,19 @@ footer {
     .award-date {
         width: auto;
     }
+
+    .contact-email {
+        font-size: 14px;
+        word-break: break-all;
+    }
+
+    .contact-links {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .contact-links a {
+        font-size: 13px;
+        padding: 6px 16px;
+    }
 }
