@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin | Ryosei Kojima</title>
+    <meta name="robots" content="noindex,nofollow">
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: "Hiragino Sans", -apple-system, sans-serif;
+            background: #f6f7f9;
+            color: #222;
+        }
+        header.admin-bar {
+            background: #1a1a2e;
+            color: #fff;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        header.admin-bar h1 { margin: 0; font-size: 16px; font-weight: 700; }
+        .admin-bar-actions button {
+            margin-left: 8px;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            background: #3a86ff;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .admin-bar-actions button.secondary { background: #555; }
+        .admin-bar-actions button:hover { opacity: 0.85; }
+        .layout {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            min-height: calc(100vh - 56px);
+        }
+        nav.tabs {
+            background: #fff;
+            border-right: 1px solid #e0e0e0;
+            padding: 16px 0;
+        }
+        nav.tabs button {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 10px 24px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            color: #444;
+        }
+        nav.tabs button.active {
+            background: #3a86ff;
+            color: #fff;
+            font-weight: 600;
+        }
+        main {
+            padding: 24px;
+            overflow-x: auto;
+        }
+        .panel { display: none; }
+        .panel.active { display: block; }
+        .panel h2 { margin: 0 0 16px; font-size: 22px; }
+        .field {
+            margin-bottom: 12px;
+        }
+        .field label {
+            display: block;
+            font-size: 12px;
+            color: #555;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+        .field input, .field textarea {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid #d0d0d0;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+        .field textarea { min-height: 80px; resize: vertical; }
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        .card {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        .card-header strong { font-size: 13px; color: #666; }
+        .card-actions button {
+            margin-left: 4px;
+            padding: 4px 8px;
+            border: 1px solid #ccc;
+            background: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .card-actions .delete { color: #c00; border-color: #c00; }
+        .add-btn {
+            padding: 10px 20px;
+            background: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        .group {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+        .group h3 { margin-top: 0; font-size: 16px; color: #1a1a2e; }
+        .help {
+            font-size: 12px;
+            color: #888;
+            margin-top: 4px;
+        }
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #28a745;
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 6px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1000;
+        }
+        .toast.show { opacity: 1; }
+    </style>
+</head>
+<body>
+
+<header class="admin-bar">
+    <h1>Site Admin — Ryosei Kojima</h1>
+    <div class="admin-bar-actions">
+        <input type="file" id="file-input" accept=".json" style="display:none">
+        <button class="secondary" onclick="document.getElementById('file-input').click()">Load JSON</button>
+        <button onclick="downloadJSON()">Download data.json</button>
+    </div>
+</header>
+
+<div class="layout">
+    <nav class="tabs" id="tabs"></nav>
+    <main>
+        <div id="panels"></div>
+    </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let data = {};
+const sections = [
+    { id: "profile", label: "Profile" },
+    { id: "about", label: "About" },
+    { id: "education", label: "Education" },
+    { id: "research", label: "Research" },
+    { id: "publications", label: "Publications" },
+    { id: "patents", label: "Patents" },
+    { id: "awards", label: "Awards" },
+    { id: "skills", label: "Skills" },
+    { id: "contact", label: "Contact" },
+    { id: "footer", label: "Footer" },
+];
+
+function toast(msg) {
+    const t = document.getElementById("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    setTimeout(() => t.classList.remove("show"), 1800);
+}
+
+function downloadJSON() {
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "data.json";
+    a.click();
+    URL.revokeObjectURL(url);
+    toast("data.json downloaded");
+}
+
+document.getElementById("file-input").addEventListener("change", function (e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function () {
+        data = JSON.parse(reader.result);
+        renderAll();
+        toast("Loaded " + file.name);
+    };
+    reader.readAsText(file);
+});
+
+function field(label, value, oninput, opts = {}) {
+    const id = "f_" + Math.random().toString(36).slice(2, 9);
+    const tag = opts.textarea ? "textarea" : "input";
+    const f = document.createElement("div");
+    f.className = "field";
+    const help = opts.help ? `<div class="help">${opts.help}</div>` : "";
+    f.innerHTML = `<label for="${id}">${label}</label><${tag} id="${id}" ${tag === "input" ? `value="${escapeAttr(value || "")}"` : ""}>${tag === "textarea" ? escapeHtml(value || "") : ""}</${tag}>${help}`;
+    f.querySelector("#" + id).addEventListener("input", e => oninput(e.target.value));
+    return f;
+}
+
+function escapeAttr(s) { return String(s).replace(/"/g, "&quot;"); }
+function escapeHtml(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+
+function row(...fields) {
+    const r = document.createElement("div");
+    r.className = "row";
+    fields.forEach(f => r.appendChild(f));
+    return r;
+}
+
+function card(title, contentEl, actions) {
+    const c = document.createElement("div");
+    c.className = "card";
+    const h = document.createElement("div");
+    h.className = "card-header";
+    h.innerHTML = `<strong>${title}</strong><div class="card-actions"></div>`;
+    const a = h.querySelector(".card-actions");
+    actions.forEach(act => {
+        const btn = document.createElement("button");
+        btn.textContent = act.label;
+        if (act.danger) btn.className = "delete";
+        btn.onclick = act.fn;
+        a.appendChild(btn);
+    });
+    c.appendChild(h);
+    c.appendChild(contentEl);
+    return c;
+}
+
+function listEditor(list, renderItem, makeNew, refreshAll) {
+    const container = document.createElement("div");
+    function refresh() {
+        container.innerHTML = "";
+        list.forEach((item, i) => {
+            const inner = document.createElement("div");
+            renderItem(item, i, inner);
+            const actions = [
+                { label: "↑", fn: () => { if (i > 0) { [list[i-1], list[i]] = [list[i], list[i-1]]; refresh(); } } },
+                { label: "↓", fn: () => { if (i < list.length - 1) { [list[i], list[i+1]] = [list[i+1], list[i]]; refresh(); } } },
+                { label: "Delete", danger: true, fn: () => { if (confirm("Delete this entry?")) { list.splice(i, 1); refresh(); } } },
+            ];
+            container.appendChild(card(`#${i + 1}`, inner, actions));
+        });
+        const addBtn = document.createElement("button");
+        addBtn.className = "add-btn";
+        addBtn.textContent = "+ Add new";
+        addBtn.onclick = () => { list.push(makeNew()); refresh(); };
+        container.appendChild(addBtn);
+    }
+    refresh();
+    return container;
+}
+
+// === Panel renderers ===
+
+function renderProfile() {
+    const p = data.profile;
+    const el = document.createElement("div");
+    const g = document.createElement("div");
+    g.className = "group";
+    g.innerHTML = "<h3>Profile</h3>";
+    g.appendChild(row(
+        field("Name (JP)", p.name_ja, v => p.name_ja = v),
+        field("Name (EN)", p.name_en, v => p.name_en = v),
+    ));
+    g.appendChild(row(
+        field("Subname under Hero (JP)", p.subname_ja, v => p.subname_ja = v),
+        field("Subname under Hero (EN)", p.subname_en, v => p.subname_en = v),
+    ));
+    g.appendChild(row(
+        field("Affiliation (JP)", p.affiliation_ja, v => p.affiliation_ja = v, { textarea: true, help: "<br> for line break" }),
+        field("Affiliation (EN)", p.affiliation_en, v => p.affiliation_en = v, { textarea: true, help: "<br> for line break" }),
+    ));
+    g.appendChild(row(
+        field("Tagline (JP)", p.tagline_ja, v => p.tagline_ja = v),
+        field("Tagline (EN)", p.tagline_en, v => p.tagline_en = v),
+    ));
+    g.appendChild(field("Profile image path", p.image, v => p.image = v));
+    el.appendChild(g);
+    return el;
+}
+
+function renderAboutPanel() {
+    const el = document.createElement("div");
+    const g = document.createElement("div");
+    g.className = "group";
+    g.innerHTML = "<h3>About</h3>";
+    g.appendChild(field("About (JP)", data.about_ja, v => data.about_ja = v, { textarea: true }));
+    g.appendChild(field("About (EN)", data.about_en, v => data.about_en = v, { textarea: true }));
+    el.appendChild(g);
+    return el;
+}
+
+function renderEducation() {
+    return listEditor(data.education,
+        (item, i, inner) => {
+            inner.appendChild(row(
+                field("Date (JP)", item.date_ja, v => item.date_ja = v),
+                field("Date (EN)", item.date_en, v => item.date_en = v),
+            ));
+            inner.appendChild(row(
+                field("Content (JP) — HTML allowed", item.content_ja, v => item.content_ja = v, { textarea: true }),
+                field("Content (EN) — HTML allowed", item.content_en, v => item.content_en = v, { textarea: true }),
+            ));
+        },
+        () => ({ date_ja: "", date_en: "", content_ja: "", content_en: "" })
+    );
+}
+
+function renderResearch() {
+    return listEditor(data.research_projects,
+        (item, i, inner) => {
+            inner.appendChild(row(
+                field("Title (JP)", item.title_ja, v => item.title_ja = v),
+                field("Title (EN)", item.title_en, v => item.title_en = v),
+            ));
+            inner.appendChild(field("URL", item.url, v => item.url = v));
+            inner.appendChild(row(
+                field("Meta (JP)", item.meta_ja, v => item.meta_ja = v),
+                field("Meta (EN)", item.meta_en, v => item.meta_en = v),
+            ));
+            inner.appendChild(row(
+                field("Description (JP)", item.description_ja, v => item.description_ja = v, { textarea: true }),
+                field("Description (EN)", item.description_en, v => item.description_en = v, { textarea: true }),
+            ));
+            inner.appendChild(field("YouTube video ID", item.video_id, v => item.video_id = v, { help: "e.g., v1Ds2sIvUqw" }));
+        },
+        () => ({ title_ja: "", title_en: "", url: "", meta_ja: "", meta_en: "", description_ja: "", description_en: "", video_id: "" })
+    );
+}
+
+function renderPubGroup(label, listName) {
+    const wrap = document.createElement("div");
+    wrap.className = "group";
+    wrap.innerHTML = `<h3>${label}</h3>`;
+    wrap.appendChild(listEditor(data.publications[listName],
+        (item, i, inner) => {
+            inner.appendChild(row(
+                field("Authors (JP) — wrap your name in **...**", item.authors_ja, v => item.authors_ja = v, { textarea: true }),
+                field("Authors (EN) — wrap your name in **...**", item.authors_en, v => item.authors_en = v, { textarea: true }),
+            ));
+            if (listName === "domestic") {
+                inner.appendChild(row(
+                    field("Title (JP)", item.title_ja, v => item.title_ja = v, { textarea: true }),
+                    field("Title (EN)", item.title_en, v => item.title_en = v, { textarea: true }),
+                ));
+            } else {
+                inner.appendChild(field("Title", item.title, v => item.title = v, { textarea: true }));
+            }
+            inner.appendChild(row(
+                field("Venue (JP) — HTML allowed", item.venue_ja, v => item.venue_ja = v, { textarea: true }),
+                field("Venue (EN) — HTML allowed", item.venue_en, v => item.venue_en = v, { textarea: true }),
+            ));
+            inner.appendChild(row(
+                field("DOI (without https://doi.org/)", item.doi, v => item.doi = v || null),
+                field("URL (alternative)", item.url, v => item.url = v || null),
+            ));
+        },
+        () => listName === "domestic"
+            ? { authors_ja: "", authors_en: "", title_ja: "", title_en: "", venue_ja: "", venue_en: "", doi: null, url: null }
+            : { authors_ja: "", authors_en: "", title: "", venue_ja: "", venue_en: "", doi: null, url: null }
+    ));
+    return wrap;
+}
+
+function renderPublications() {
+    const el = document.createElement("div");
+    el.appendChild(renderPubGroup("First Author / 主著", "first_author"));
+    el.appendChild(renderPubGroup("Co-Author / 共著", "co_author"));
+    el.appendChild(renderPubGroup("Domestic / 国内学会", "domestic"));
+    return el;
+}
+
+function renderPatents() {
+    return listEditor(data.patents,
+        (item, i, inner) => {
+            inner.appendChild(row(
+                field("Text (JP)", item.text_ja, v => item.text_ja = v),
+                field("Text (EN)", item.text_en, v => item.text_en = v),
+            ));
+        },
+        () => ({ text_ja: "", text_en: "" })
+    );
+}
+
+function renderAwardGroup(label, listName) {
+    const wrap = document.createElement("div");
+    wrap.className = "group";
+    wrap.innerHTML = `<h3>${label}</h3>`;
+    wrap.appendChild(listEditor(data.awards[listName],
+        (item, i, inner) => {
+            inner.appendChild(field("Date", item.date, v => item.date = v));
+            inner.appendChild(row(
+                field("Content (JP) — HTML allowed", item.content_ja, v => item.content_ja = v, { textarea: true }),
+                field("Content (EN) — HTML allowed", item.content_en, v => item.content_en = v, { textarea: true }),
+            ));
+        },
+        () => ({ date: "", content_ja: "", content_en: "" })
+    ));
+    return wrap;
+}
+
+function renderAwards() {
+    const el = document.createElement("div");
+    el.appendChild(renderAwardGroup("Funding / 助成金・奨学金", "funding"));
+    el.appendChild(renderAwardGroup("Honors / 受賞歴", "honors"));
+    el.appendChild(renderAwardGroup("TA", "ta"));
+    el.appendChild(renderAwardGroup("RA", "ra"));
+    el.appendChild(renderAwardGroup("Other Activities / その他の活動", "other"));
+    return el;
+}
+
+function renderSkills() {
+    return listEditor(data.skills,
+        (item, i, inner) => {
+            inner.appendChild(row(
+                field("Category (JP)", item.category_ja, v => item.category_ja = v),
+                field("Category (EN)", item.category_en, v => item.category_en = v),
+            ));
+            if (item.items_ja !== undefined || item.items_en !== undefined) {
+                inner.appendChild(row(
+                    field("Items (JP)", item.items_ja, v => item.items_ja = v),
+                    field("Items (EN)", item.items_en, v => item.items_en = v),
+                ));
+            } else {
+                inner.appendChild(field("Items (shared JP/EN)", item.items, v => item.items = v));
+            }
+        },
+        () => ({ category_ja: "", category_en: "", items_ja: "", items_en: "" })
+    );
+}
+
+function renderContact() {
+    const el = document.createElement("div");
+    const g1 = document.createElement("div");
+    g1.className = "group";
+    g1.innerHTML = "<h3>Emails</h3>";
+    g1.appendChild(listEditor(data.contact.emails,
+        (item, i, inner) => {
+            const f = field("Email", item, v => data.contact.emails[i] = v);
+            inner.appendChild(f);
+        },
+        () => ""
+    ));
+    el.appendChild(g1);
+
+    const g2 = document.createElement("div");
+    g2.className = "group";
+    g2.innerHTML = "<h3>Social Links</h3>";
+    g2.appendChild(listEditor(data.contact.links,
+        (item, i, inner) => {
+            inner.appendChild(field("Label", item.label, v => item.label = v));
+            if (item.url_ja !== undefined || item.url_en !== undefined) {
+                inner.appendChild(row(
+                    field("URL (JP)", item.url_ja, v => item.url_ja = v),
+                    field("URL (EN)", item.url_en, v => item.url_en = v),
+                ));
+            } else {
+                inner.appendChild(field("URL (shared)", item.url, v => item.url = v));
+            }
+        },
+        () => ({ label: "", url: "" })
+    ));
+    el.appendChild(g2);
+    return el;
+}
+
+function renderFooter() {
+    const el = document.createElement("div");
+    const g = document.createElement("div");
+    g.className = "group";
+    g.innerHTML = "<h3>Footer</h3>";
+    g.appendChild(field("Copyright Year", data.footer_year, v => data.footer_year = v));
+    el.appendChild(g);
+    return el;
+}
+
+const renderers = {
+    profile: renderProfile,
+    about: renderAboutPanel,
+    education: renderEducation,
+    research: renderResearch,
+    publications: renderPublications,
+    patents: renderPatents,
+    awards: renderAwards,
+    skills: renderSkills,
+    contact: renderContact,
+    footer: renderFooter,
+};
+
+function renderAll() {
+    const tabs = document.getElementById("tabs");
+    const panels = document.getElementById("panels");
+    tabs.innerHTML = "";
+    panels.innerHTML = "";
+
+    sections.forEach((s, i) => {
+        const btn = document.createElement("button");
+        btn.textContent = s.label;
+        btn.dataset.target = s.id;
+        if (i === 0) btn.classList.add("active");
+        btn.onclick = () => {
+            document.querySelectorAll("nav.tabs button").forEach(b => b.classList.remove("active"));
+            document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+            btn.classList.add("active");
+            document.getElementById("panel-" + s.id).classList.add("active");
+        };
+        tabs.appendChild(btn);
+
+        const p = document.createElement("div");
+        p.className = "panel" + (i === 0 ? " active" : "");
+        p.id = "panel-" + s.id;
+        p.innerHTML = `<h2>${s.label}</h2>`;
+        p.appendChild(renderers[s.id]());
+        panels.appendChild(p);
+    });
+}
+
+// Auto-load existing data.json
+fetch("data.json")
+    .then(r => r.json())
+    .then(d => {
+        data = d;
+        renderAll();
+        toast("Loaded data.json");
+    })
+    .catch(err => {
+        console.error(err);
+        document.getElementById("panels").innerHTML =
+            `<div style="color:#c00;padding:20px;">Could not auto-load data.json. Use "Load JSON" button to import a file. (${err.message})</div>`;
+    });
+</script>
+
+</body>
+</html>

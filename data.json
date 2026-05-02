@@ -1,0 +1,307 @@
+{
+  "profile": {
+    "name_ja": "小嶋 凌勢",
+    "name_en": "Ryosei Kojima",
+    "subname_ja": "Ryosei Kojima",
+    "subname_en": "小嶋 凌勢",
+    "affiliation_ja": "筑波大学大学院 情報学学位プログラム 博士後期課程<br>デジタルネイチャー研究室（落合陽一 研究室）",
+    "affiliation_en": "Ph.D. Student, Degree Program in Informatics<br>Digital Nature Group (Yoichi Ochiai Lab), University of Tsukuba",
+    "tagline_ja": "空気渦輪を用いた非接触触覚提示の研究",
+    "tagline_en": "Non-contact Haptic Display Using Air Vortex Rings",
+    "image": "images/profile.jpg"
+  },
+  "about_ja": "空気渦輪を用いた非接触触覚提示システムの研究開発を5年以上にわたり主導し、James Dyson Award 国内最優秀賞をはじめ複数の受賞歴を有する。HIFU（高密度集束超音波）によるアクリル板エンボス加工の原理解明に向けた実験系設計・実験遂行を担当し、共著論文がACM CHI 2024に採択された。",
+  "about_en": "5+ years of R&D experience leading award-winning air-vortex systems for accessibility and contributing to HIFU-based tactile interfaces. End-to-end engineering expertise from theoretical design to practical implementation, with societal impact in accessibility and HCI. Co-authored paper on HIFU Embossment of Acrylic Sheets accepted at ACM CHI 2024.",
+  "education": [
+    {
+      "date_ja": "2023年4月 – 現在",
+      "date_en": "Apr 2023 – Present",
+      "content_ja": "<strong>筑波大学大学院</strong> 情報学学位プログラム 博士後期課程（GPA: 4.0/4.3）<br>デジタルネイチャー研究室、指導教員：落合陽一 准教授",
+      "content_en": "<strong>University of Tsukuba</strong> Doctor of Informatics (GPA: 4.0/4.3)<br>Digital Nature Group, Advised by Associate Professor Yoichi Ochiai"
+    },
+    {
+      "date_ja": "2021年4月 – 2023年3月",
+      "date_en": "Apr 2021 – Mar 2023",
+      "content_ja": "<strong>筑波大学大学院</strong> 情報学学位プログラム 博士前期課程（GPA: 3.7/4.3）<br>デジタルネイチャー研究室、指導教員：落合陽一 准教授",
+      "content_en": "<strong>University of Tsukuba</strong> Master of Informatics (GPA: 3.7/4.3)<br>Digital Nature Group, Advised by Associate Professor Yoichi Ochiai"
+    },
+    {
+      "date_ja": "2017年4月 – 2021年3月",
+      "date_en": "Apr 2017 – Mar 2021",
+      "content_ja": "<strong>明治大学</strong> 理工学部 機械工学科<br>流体工学研究室、指導教員：榊原 潤 教授",
+      "content_en": "<strong>Meiji University</strong> Bachelor of Engineering in Mechanical Engineering<br>Fluid Engineering Laboratory, Advised by Professor Jun Sakakibara"
+    }
+  ],
+  "research_projects": [
+    {
+      "title_ja": "HIFUによるアクリル板エンボス加工",
+      "title_en": "HIFU Embossment of Acrylic Sheets",
+      "url": "https://digitalnature.slis.tsukuba.ac.jp/2023/08/ultrasonic-embossment-of-acrylic-sheets-with-transparency-control/",
+      "meta_ja": "2023年6月 – 2024年5月 ｜ ACM CHI 2024 採択",
+      "meta_en": "Jun 2023 – May 2024 | ACM CHI 2024",
+      "description_ja": "従来の金型を用いたエンボス加工の制約を解消するため、高強度集束超音波（HIFU）により金型不要でアクリル板に任意のエンボスパターンを形成する手法を提案した。HIFU素子・水槽・XYZプロッタ・アンプ・オシロスコープ等を組み合わせた実験系を構築し、振幅（8.90〜26.7 Vrms）・照射時間（1〜50秒）・焦点距離（32.25〜69.75 mm）の全組み合わせ計51点×9条件の網羅的実験を実施。エンボス高さ・透明度・線生成を制御するパラメータ条件を特定した。",
+      "description_en": "Proposed a new embossing method using High-Intensity Focused Ultrasound (HIFU) to form arbitrary emboss patterns on acrylic sheets without molds. Built an experimental system combining HIFU transducers, a water tank, XYZ plotter, amplifier, and oscilloscope. Conducted comprehensive experiments across 51 points × 9 conditions varying amplitude (8.90–26.7 Vrms), irradiation time (1–50 s), and focal distance (32.25–69.75 mm), identifying parameter conditions that control emboss height, transparency, and line formation.",
+      "video_id": "v1Ds2sIvUqw"
+    },
+    {
+      "title_ja": "Air Talk-Starter：ろう・難聴者のための空気渦輪触覚通知",
+      "title_en": "Air Talk-Starter: Air Vortex Haptic Notification for DHH Users",
+      "url": "https://digitalnature.slis.tsukuba.ac.jp/2022/07/air-talk-starter/",
+      "meta_ja": "2021年4月 – 2023年5月 ｜ James Dyson Award 国内最優秀賞",
+      "meta_en": "Apr 2021 – May 2023 | James Dyson Award Japan National Winner",
+      "description_ja": "ろう・難聴者が話しかけられた瞬間に気づけないという課題に対し、空気渦輪を用いて頭部に非接触で触覚刺激を提示するシステムを開発した。空気渦輪生成理論の検討からプロトタイピング、制御アルゴリズム開発、ユーザスタディまでの全工程を管理し、1〜2 mの距離で90%以上の感知精度を達成した。",
+      "description_en": "Addressed the issue that Deaf/hard-of-hearing (DHH) individuals often miss the moment someone starts speaking to them, by creating a non-contact, air-vortex-based system that delivers a gentle tactile cue on the user's head. Managed all project phases from air-vortex generation theory to prototyping, control algorithm development, and user studies, achieving >90% directional accuracy at 1–2 m.",
+      "video_id": "Aif3v1m-30Y"
+    }
+  ],
+  "publications": {
+    "first_author": [
+      {
+        "authors_ja": "**Ryosei Kojima**, Akihisa Shitara, Tatsuki Fushimi, Ryogo Niwa, Atushi Shinoda, Ryo Iijima, Kengo Tanaka, Sayan Sarcar, Yoichi Ochiai.",
+        "authors_en": "**Ryosei Kojima**, Akihisa Shitara, Tatsuki Fushimi, Ryogo Niwa, Atushi Shinoda, Ryo Iijima, Kengo Tanaka, Sayan Sarcar, Yoichi Ochiai.",
+        "title": "Demonstrating SHITARA: Sending Haptic Induced Touchable Alarm by Ring-shaped Air Vortex.",
+        "venue_ja": "<em>ACM CHI 2023 Hot Desk Demo</em>（査読あり）, Hamburg, Germany, Apr 2023.",
+        "venue_en": "<em>ACM CHI 2023 Hot Desk Demo</em> (peer-reviewed), Hamburg, Germany, Apr 2023.",
+        "doi": null,
+        "url": null
+      },
+      {
+        "authors_ja": "**Ryosei Kojima**, Akihisa Shitara, Tatsuki Fushimi, Ryogo Niwa, Atushi Shinoda, Ryo Iijima, Kengo Tanaka, Sayan Sarcar, Yoichi Ochiai.",
+        "authors_en": "**Ryosei Kojima**, Akihisa Shitara, Tatsuki Fushimi, Ryogo Niwa, Atushi Shinoda, Ryo Iijima, Kengo Tanaka, Sayan Sarcar, Yoichi Ochiai.",
+        "title": "SHITARA: Sending Haptic Induced Touchable Alarm by Ring-shaped Air Vortex.",
+        "venue_ja": "<em>arXiv preprint</em>, 2023.",
+        "venue_en": "<em>arXiv preprint</em>, 2023.",
+        "doi": "10.48550/arXiv.2301.08107",
+        "url": null
+      }
+    ],
+    "co_author": [
+      {
+        "authors_ja": "Ayaka Tsutsui, Takahito Murakami, Tatsuki Fushimi, **Ryosei Kojima**, Kengo Tanaka, Yoichi Ochiai.",
+        "authors_en": "Ayaka Tsutsui, Takahito Murakami, Tatsuki Fushimi, **Ryosei Kojima**, Kengo Tanaka, Yoichi Ochiai.",
+        "title": "Evaluating Tactile Perception of Robot-Controlled HIFU Embossing.",
+        "venue_ja": "<em>HRI Companion '26</em>, pp. 558–562, 2026.",
+        "venue_en": "<em>HRI Companion '26</em>, pp. 558–562, 2026.",
+        "doi": "10.1145/3776734.3794457",
+        "url": null
+      },
+      {
+        "authors_ja": "Ayaka Tsutsui, Tatsuki Fushimi, Takahito Murakami, **Ryosei Kojima**, Kengo Tanaka, Yoichi Ochiai.",
+        "authors_en": "Ayaka Tsutsui, Tatsuki Fushimi, Takahito Murakami, **Ryosei Kojima**, Kengo Tanaka, Yoichi Ochiai.",
+        "title": "HIFU Embossment of Acrylic Sheets.",
+        "venue_ja": "<em>CHI '24</em>, Article 431, pp. 1–23, 2024.（採択率26%）",
+        "venue_en": "<em>CHI '24</em>, Article 431, pp. 1–23, 2024. (acceptance rate: 26%)",
+        "doi": "10.1145/3613904.3642890",
+        "url": null
+      },
+      {
+        "authors_ja": "Shieru Suzuki, Kazuma Aoyama, **Ryosei Kojima**, Kazuya Izumi, Tatsuki Fushimi, Yoichi Ochiai.",
+        "authors_en": "Shieru Suzuki, Kazuma Aoyama, **Ryosei Kojima**, Kazuya Izumi, Tatsuki Fushimi, Yoichi Ochiai.",
+        "title": "ExudedVestibule: Enhancing Mid-air Haptics through Galvanic Vestibular Stimulation.",
+        "venue_ja": "<em>SIGGRAPH '23 Posters</em>, Article 41, pp. 1–2, 2023.",
+        "venue_en": "<em>SIGGRAPH '23 Posters</em>, Article 41, pp. 1–2, 2023.",
+        "doi": "10.1145/3588028.3603648",
+        "url": null
+      }
+    ],
+    "domestic": [
+      {
+        "authors_ja": "浦入千宗、星貴之、**小嶋凌勢**、伏見龍樹、落合陽一.",
+        "authors_en": "Chikane Urairi, Takayuki Hoshi, **Ryosei Kojima**, Tatsuki Fushimi, Yoichi Ochiai.",
+        "title_ja": "「コナジラミ類防除ロボットの実用化に向けた空気渦輪による害虫の離脱促進効果の検討」",
+        "title_en": "\"Investigation of Pest Detachment Effects by Air Vortex Rings for Practical Whitefly Control Robots.\"",
+        "venue_ja": "第69回日本応用動物昆虫学会大会、幕張メッセ国際会議場、2026年3月.",
+        "venue_en": "69th Annual Meeting of the Japanese Society of Applied Entomology and Zoology, Makuhari Messe, Mar 2026.",
+        "doi": null,
+        "url": null
+      }
+    ]
+  },
+  "patents": [
+    {
+      "text_ja": "「空気流制御デバイス、及び、空気流制御デバイスの設計方法」（特願2025-084118、2025年）",
+      "text_en": "\"Airflow Control Device and Design Method for Airflow Control Device\" (No. 2025-084118, 2025)"
+    },
+    {
+      "text_ja": "「微生物輸送装置」（特願2023-024073、2023年）",
+      "text_en": "\"Microbial Transport Device\" (No. 2023-024073, 2023)"
+    },
+    {
+      "text_ja": "「通知装置」（特願2022-171382、2022年）",
+      "text_en": "\"Notification Device\" (No. 2022-171382, 2022)"
+    },
+    {
+      "text_ja": "「空気渦輪発生装置」（特願2022-131509、2022年）",
+      "text_en": "\"Air Vortex Generator\" (No. 2022-131509, 2022)"
+    }
+  ],
+  "awards": {
+    "funding": [
+      {
+        "date": "2024–2026",
+        "content_ja": "<strong>筑波大学 授業料免除（全額免除）</strong>：267,900円 × 4期",
+        "content_en": "<strong>University of Tsukuba Tuition Exemption (Full)</strong>: ¥267,900 × 4 terms"
+      },
+      {
+        "date": "2023–2026",
+        "content_ja": "<strong>JST SPRING 区分１ 採択</strong>：年額290万円（生活費240万円、研究費50万円）",
+        "content_en": "<strong>JST SPRING Section 1 Research Fellow</strong>: Annual stipend of ¥2.9M (¥2.4M living expenses, ¥0.5M research funds)"
+      },
+      {
+        "date": "2022",
+        "content_ja": "<strong>総務省 異能vation 2022年度「破壊的な挑戦部門」挑戦者 採択</strong>：挑戦課題名：微生物という情報を運搬する空気場の構築、応募総数1,717件のうち16件採択（採択率：0.9%）",
+        "content_en": "<strong>INNO-vation Program \"Disruptive Challenge\" Challenger</strong>: Top 16 / 1,717 applicants (0.9%), received ¥1,000,000"
+      },
+      {
+        "date": "2022–2023",
+        "content_ja": "<strong>JASSO第一種奨学金</strong>：月額88,000円、優秀な成績により全額返還免除",
+        "content_en": "<strong>JASSO Type 1 Scholarship</strong>: Monthly ¥88,000, fully exempted repayment for excellent grades"
+      }
+    ],
+    "honors": [
+      {
+        "date": "2024",
+        "content_ja": "<a href=\"https://archive.nya-award.jp/2024/works/7333/\" target=\"_blank\"><strong>NEXT YOUNG ARTIST AWARD 2024 ゲーム＆インタラクション部門 優秀賞</strong></a>：384作品中上位5作品",
+        "content_en": "<a href=\"https://archive.nya-award.jp/2024/works/7333/\" target=\"_blank\"><strong>NEXT YOUNG ARTIST AWARD 2024, Game & Interaction Category, Excellence Award</strong></a>: Top 5 / 384 entries"
+      },
+      {
+        "date": "2023",
+        "content_ja": "<strong>筑波大学学長表彰</strong>：修了生2,103名中約12名に授与（上位0.5%）",
+        "content_en": "<strong>University of Tsukuba President's Award</strong>: Top honor awarded to ~12 out of 2,103 graduates (0.5%)"
+      },
+      {
+        "date": "2022",
+        "content_ja": "<strong>WIRED Creative Hack Award ファイナリスト</strong>：253チーム中上位16チーム",
+        "content_en": "<strong>WIRED Creative Hack Award Finalist</strong>: Top 16 / 253 teams (6.3%)"
+      },
+      {
+        "date": "2022",
+        "content_ja": "<a href=\"https://archive.nya-award.jp/2022/works/6319/\" target=\"_blank\"><strong>第28回学生CGコンテスト ノミネート</strong></a>：404チーム中上位26チーム",
+        "content_en": "<a href=\"https://archive.nya-award.jp/2022/works/6319/\" target=\"_blank\"><strong>28th Student CG Contest Nominee</strong></a>: Top 26 / 404 teams (6.4%)"
+      },
+      {
+        "date": "2022",
+        "content_ja": "<a href=\"https://www.jamesdysonaward.org/ja-JP/2022/project/air-talk-starter\" target=\"_blank\"><strong>James Dyson Award 国内最優秀賞</strong></a>：Air Talk-Starter",
+        "content_en": "<a href=\"https://www.jamesdysonaward.org/ja-JP/2022/project/air-talk-starter\" target=\"_blank\"><strong>James Dyson Award Japan National Winner</strong></a>: Air Talk-Starter"
+      }
+    ],
+    "ta": [
+      {
+        "date": "2025",
+        "content_ja": "<strong>「調査とデータ分析」TA</strong>（筑波大学大学院、2025年1月〜2025年2月）",
+        "content_en": "<strong>\"Survey and Data Analysis\" TA</strong> (University of Tsukuba, Jan–Feb 2025)"
+      },
+      {
+        "date": "2024",
+        "content_ja": "<strong>「異分野コミュニケーションのためのプレゼンテーションバトル」TA</strong>（筑波大学大学院、2024年4月〜2024年11月）",
+        "content_en": "<strong>\"Presentation Battle for Interdisciplinary Communication\" TA</strong> (University of Tsukuba, Apr–Nov 2024)"
+      },
+      {
+        "date": "2021–2022",
+        "content_ja": "<strong>「コンテンツ入門」TA</strong>（筑波大学 学部授業、2021年9月〜2022年1月）",
+        "content_en": "<strong>\"Introduction to Contents\" TA</strong> (University of Tsukuba, Sep 2021–Jan 2022)"
+      }
+    ],
+    "ra": [
+      {
+        "date": "2024–2025",
+        "content_ja": "<strong>ピクシーダストテクノロジーズ(株)との特別共同研究事業「デジタルネイチャー推進戦略研究基盤」RA</strong>（2024年12月〜2025年2月）",
+        "content_en": "<strong>Pixie Dust Technologies, Inc. & University of Tsukuba Joint Research \"Digital Nature Strategic Research Platform\" RA</strong> (Dec 2024–Feb 2025)"
+      },
+      {
+        "date": "2023–2024",
+        "content_ja": "<strong>筑波大学 図書館情報メディア系 RA</strong>（2023年7月〜2024年3月）",
+        "content_en": "<strong>University of Tsukuba, Faculty of Library, Information and Media Science RA</strong> (Jul 2023–Mar 2024)"
+      },
+      {
+        "date": "2022–2023",
+        "content_ja": "<strong>ピクシーダストテクノロジーズ(株)との特別共同研究事業「デジタルネイチャー推進戦略研究基盤」RA</strong>（2022年6月〜2023年3月）",
+        "content_en": "<strong>Pixie Dust Technologies, Inc. & University of Tsukuba Joint Research \"Digital Nature Strategic Research Platform\" RA</strong> (Jun 2022–Mar 2023)"
+      }
+    ],
+    "other": [
+      {
+        "date": "2023",
+        "content_ja": "<a href=\"https://blog.miraikan.jst.go.jp/articles/20230607post-501.html\" target=\"_blank\"><strong>アウトリーチ</strong></a>：日本科学未来館にて公開ワークショップを企画・運営",
+        "content_en": "<a href=\"https://blog.miraikan.jst.go.jp/articles/20230607post-501.html\" target=\"_blank\"><strong>Public Outreach</strong></a>: Organized a public workshop at the National Museum of Emerging Science and Innovation (Miraikan)"
+      },
+      {
+        "date": "2023",
+        "content_ja": "<a href=\"https://www.nhk.jp/p/baribara/ts/8Q416M6Q79/episode/te/QMZ4RW7WZN/\" target=\"_blank\"><strong>テレビ出演</strong></a>：NHK「バリバラ」にてAir Talk-Starterを紹介",
+        "content_en": "<a href=\"https://www.nhk.jp/p/baribara/ts/8Q416M6Q79/episode/te/QMZ4RW7WZN/\" target=\"_blank\"><strong>TV Appearance</strong></a>: Presented Air Talk-Starter on NHK's \"Baribara\""
+      },
+      {
+        "date": "2023",
+        "content_ja": "<strong>招待講演</strong>：IBM JapanにてAir Talk-Starterに関する講演を実施",
+        "content_en": "<strong>Invited Talk</strong>: Delivered a talk on Air Talk-Starter at IBM Japan"
+      },
+      {
+        "date": "2021",
+        "content_ja": "<a href=\"https://audee.jp/voice/show/35991\" target=\"_blank\"><strong>ラジオ出演</strong></a>：FUTURES 落合陽一 RADIO PIXIE DUST ゲスト出演",
+        "content_en": "<a href=\"https://audee.jp/voice/show/35991\" target=\"_blank\"><strong>Radio Appearance</strong></a>: Guest on FUTURES Yoichi Ochiai RADIO PIXIE DUST"
+      }
+    ]
+  },
+  "skills": [
+    {
+      "category_ja": "ハードウェア設計",
+      "category_en": "Hardware Design",
+      "items": "Autodesk Fusion, Autodesk EAGLE"
+    },
+    {
+      "category_ja": "プログラミング言語",
+      "category_en": "Programming Languages",
+      "items": "Python, MATLAB, C++, Arduino, JavaScript"
+    },
+    {
+      "category_ja": "電気計測機器",
+      "category_en": "Electrical Tools",
+      "items_ja": "オシロスコープ、ファンクションジェネレータ、高速バイポーラ電源",
+      "items_en": "Oscilloscope, Function Generator, High-speed Bipolar Power Supply"
+    },
+    {
+      "category_ja": "加工技術",
+      "category_en": "Fabrication",
+      "items_ja": "CNCフライス盤、3Dプリンタ（FDM、SLA）、レーザーカッター",
+      "items_en": "CNC Milling Machine, 3D Printing (FDM, SLA), Laser Cutter"
+    },
+    {
+      "category_ja": "精密計測",
+      "category_en": "Precision Measurement",
+      "items_ja": "レーザードップラー振動計、高速カメラ、3軸ステージコントローラ、風速計",
+      "items_en": "Laser Doppler Vibrometer, High-speed Camera, 3-axis Stage Controller, Anemometer"
+    },
+    {
+      "category_ja": "光学機器",
+      "category_en": "Optical Tools",
+      "items_ja": "フェムト秒レーザー、ガルバノスキャナ、分光放射計",
+      "items_en": "Femtosecond Laser, Galvanometer Scanner, Spectroradiometer"
+    }
+  ],
+  "contact": {
+    "emails": [
+      "ryosei.kojima@digitalnature.slis.tsukuba.ac.jp",
+      "kojima.8721@gmail.com"
+    ],
+    "links": [
+      {
+        "label": "Google Scholar",
+        "url_ja": "https://scholar.google.com/citations?user=Og2XBmUAAAAJ&hl=ja&oi=ao",
+        "url_en": "https://scholar.google.com/citations?user=Og2XBmUAAAAJ&hl=en&oi=ao"
+      },
+      {
+        "label": "LinkedIn",
+        "url": "https://linkedin.com/in/ryoseikojima/"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/ryoseikojima"
+      },
+      {
+        "label": "X (Twitter)",
+        "url": "https://x.com/RyoseiKojima"
+      }
+    ]
+  },
+  "footer_year": "2026"
+}
