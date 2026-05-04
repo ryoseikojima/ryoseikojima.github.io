@@ -154,8 +154,45 @@
             opacity: 0;
             transition: opacity 0.3s;
             z-index: 1000;
+            max-width: 480px;
         }
         .toast.show { opacity: 1; }
+        .toast.error { background: #c0392b; }
+        .modal-bg {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+        }
+        .modal-bg.show { display: flex; }
+        .modal {
+            background: #fff;
+            padding: 24px;
+            border-radius: 8px;
+            max-width: 540px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal h2 { margin: 0 0 12px; font-size: 18px; }
+        .modal p { font-size: 14px; line-height: 1.6; color: #444; }
+        .modal a { color: #3a86ff; }
+        .modal-actions { margin-top: 16px; display: flex; justify-content: flex-end; gap: 8px; }
+        .modal-actions button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .modal-actions .primary { background: #3a86ff; color: #fff; }
+        .modal-actions .danger { background: #c0392b; color: #fff; }
+        .modal-actions .secondary { background: #ddd; color: #333; }
+        .token-status { font-size: 12px; color: #aaa; margin-right: 8px; }
+        .token-status.ok { color: #80ff80; }
     </style>
 </head>
 <body>
@@ -163,9 +200,12 @@
 <header class="admin-bar">
     <h1>Site Admin — Ryosei Kojima</h1>
     <div class="admin-bar-actions">
+        <span class="token-status" id="token-status">Token: not set</span>
         <input type="file" id="file-input" accept=".json" style="display:none">
+        <button class="secondary" onclick="openTokenModal()">Settings</button>
         <button class="secondary" onclick="document.getElementById('file-input').click()">Load JSON</button>
-        <button onclick="downloadJSON()">Download data.json</button>
+        <button class="secondary" onclick="downloadJSON()">Download</button>
+        <button onclick="saveToGitHub()">Save to GitHub</button>
     </div>
 </header>
 
@@ -178,8 +218,139 @@
 
 <div class="toast" id="toast"></div>
 
+<div class="modal-bg" id="token-modal">
+    <div class="modal">
+        <h2>GitHub Token Settings</h2>
+        <p>
+            Adminから直接GitHubにcommitするには、Personal Access Token (PAT) が必要です。
+            Tokenはこのブラウザの localStorage にのみ保存され、GitHub以外には送信されません。
+        </p>
+        <p>
+            <strong>Token作成手順 (Fine-grained, 推奨):</strong><br>
+            1. <a href="https://github.com/settings/personal-access-tokens/new" target="_blank">Fine-grained PAT作成ページ</a> を開く<br>
+            2. <em>Repository access</em> → <strong>Only select repositories</strong> → <code>ryoseikojima.github.io</code> を選択<br>
+            3. <em>Repository permissions</em> → <strong>Contents</strong> を <strong>Read and write</strong> に設定<br>
+            4. Generate → 表示されたtoken (<code>github_pat_...</code>) をコピー → 下に貼り付け
+        </p>
+        <div class="field">
+            <label>Personal Access Token</label>
+            <input type="password" id="token-input" placeholder="github_pat_... or ghp_...">
+            <div class="help">入力後 Save。Clearで削除。</div>
+        </div>
+        <div class="modal-actions">
+            <button class="danger" onclick="clearToken()">Clear</button>
+            <button class="secondary" onclick="closeTokenModal()">Cancel</button>
+            <button class="primary" onclick="saveTokenFromModal()">Save</button>
+        </div>
+    </div>
+</div>
+
 <script>
 let data = {};
+
+// ===== GitHub commit =====
+const REPO_OWNER = "ryoseikojima";
+const REPO_NAME = "ryoseikojima.github.io";
+const FILE_PATH = "data.json";
+const BRANCH = "main";
+const TOKEN_KEY = "gh_pat";
+const DRAFT_KEY = "admin_draft";
+
+function getToken() { return localStorage.getItem(TOKEN_KEY) || ""; }
+function setToken(t) {
+    if (t) localStorage.setItem(TOKEN_KEY, t);
+    else localStorage.removeItem(TOKEN_KEY);
+    updateTokenStatus();
+}
+function updateTokenStatus() {
+    const el = document.getElementById("token-status");
+    const t = getToken();
+    if (t) {
+        el.textContent = "Token: " + t.slice(0, 8) + "…" + t.slice(-4);
+        el.classList.add("ok");
+    } else {
+        el.textContent = "Token: not set";
+        el.classList.remove("ok");
+    }
+}
+function openTokenModal() {
+    document.getElementById("token-input").value = getToken();
+    document.getElementById("token-modal").classList.add("show");
+}
+function closeTokenModal() {
+    document.getElementById("token-modal").classList.remove("show");
+}
+function saveTokenFromModal() {
+    const v = document.getElementById("token-input").value.trim();
+    setToken(v);
+    closeTokenModal();
+    toast(v ? "Token saved" : "Token cleared");
+}
+function clearToken() {
+    if (!confirm("Clear stored token?")) return;
+    setToken("");
+    document.getElementById("token-input").value = "";
+    toast("Token cleared");
+}
+
+async function ghGetSha() {
+    const r = await fetch(
+        `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}?ref=${BRANCH}`,
+        { headers: { Authorization: `Bearer ${getToken()}`, Accept: "application/vnd.github+json" } }
+    );
+    if (!r.ok) throw new Error(`GET sha ${r.status}: ${(await r.text()).slice(0,200)}`);
+    return (await r.json()).sha;
+}
+
+async function ghCommit(content, message) {
+    const sha = await ghGetSha();
+    const b64 = btoa(unescape(encodeURIComponent(content)));
+    const r = await fetch(
+        `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`,
+        {
+            method: "PUT",
+            headers: {
+                Authorization: `Bearer ${getToken()}`,
+                Accept: "application/vnd.github+json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ message, content: b64, sha, branch: BRANCH })
+        }
+    );
+    if (!r.ok) throw new Error(`PUT ${r.status}: ${(await r.text()).slice(0,200)}`);
+    return await r.json();
+}
+
+async function saveToGitHub() {
+    if (!getToken()) {
+        alert("GitHub Tokenが未設定です。「Settings」から設定してください。");
+        openTokenModal();
+        return;
+    }
+    const message = prompt("Commit message:", "Update site content via admin");
+    if (message === null) return;
+    try {
+        toast("Committing to GitHub…");
+        const result = await ghCommit(JSON.stringify(data, null, 2), message || "Update via admin");
+        localStorage.removeItem(DRAFT_KEY);
+        toast("✓ Committed " + result.commit.sha.slice(0, 7) + " — site will rebuild in ~1min");
+    } catch (err) {
+        console.error(err);
+        toast("Save failed: " + err.message, true);
+    }
+}
+
+// ===== Draft auto-save =====
+let saveTimer = null;
+function saveDraft() {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(() => {
+        try { localStorage.setItem(DRAFT_KEY, JSON.stringify(data)); } catch(e) {}
+    }, 500);
+}
+window.addEventListener("input", saveDraft);
+window.addEventListener("click", e => { if (e.target.tagName === "BUTTON") saveDraft(); });
+
 const sections = [
     { id: "profile", label: "Profile" },
     { id: "about", label: "About" },
@@ -193,11 +364,12 @@ const sections = [
     { id: "footer", label: "Footer" },
 ];
 
-function toast(msg) {
+function toast(msg, error) {
     const t = document.getElementById("toast");
     t.textContent = msg;
+    t.classList.toggle("error", !!error);
     t.classList.add("show");
-    setTimeout(() => t.classList.remove("show"), 1800);
+    setTimeout(() => t.classList.remove("show"), error ? 5000 : 2400);
 }
 
 function downloadJSON() {
@@ -552,10 +724,22 @@ function renderAll() {
     });
 }
 
-// Auto-load existing data.json
-fetch("data.json")
+// Auto-load existing data.json (or restore draft)
+updateTokenStatus();
+fetch("data.json?_=" + Date.now())
     .then(r => r.json())
     .then(d => {
+        const draft = localStorage.getItem(DRAFT_KEY);
+        if (draft && draft !== JSON.stringify(d)) {
+            if (confirm("未保存の編集が見つかりました。復元しますか？\n（OKで下書きを復元、CancelでGitHubの最新版を使用）")) {
+                data = JSON.parse(draft);
+                renderAll();
+                toast("Restored draft from localStorage");
+                return;
+            } else {
+                localStorage.removeItem(DRAFT_KEY);
+            }
+        }
         data = d;
         renderAll();
         toast("Loaded data.json");
@@ -565,6 +749,15 @@ fetch("data.json")
         document.getElementById("panels").innerHTML =
             `<div style="color:#c00;padding:20px;">Could not auto-load data.json. Use "Load JSON" button to import a file. (${err.message})</div>`;
     });
+
+// Warn before leaving with unsaved changes
+window.addEventListener("beforeunload", e => {
+    const draft = localStorage.getItem(DRAFT_KEY);
+    if (draft) {
+        e.preventDefault();
+        e.returnValue = "";
+    }
+});
 </script>
 
 </body>
